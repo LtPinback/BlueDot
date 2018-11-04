@@ -13,6 +13,9 @@ import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
 import android.app.ProgressDialog;
 
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.UUID;
 import java.io.IOException;
 
@@ -156,7 +159,18 @@ public class Button extends AppCompatActivity {
                 if (btSocket == null || !isBtConnected) {
                     myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
                     BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);//connects to the device's address and checks if it's available
-                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
+                    Method m = null;
+                    try {
+                        m = dispositivo.getClass().getMethod("createInsecureRfcommSocket", new Class[] {int.class});
+                        btSocket = (BluetoothSocket) m.invoke(dispositivo,2); //This is the line where port is selected. 2 is used here.
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                    //btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                     btSocket.connect();//start connection
                 }
