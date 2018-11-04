@@ -177,6 +177,11 @@ class BluetoothServer():
     :param int port:
         The Bluetooth port the server should use, the default is 1.
 
+    :param str uuid:
+        The Bluetooth uuid the server should use,
+        the default is “00001101-0000-1000-8000-00805f9b34fb”, and under
+        normal use this should never need to change.
+
     :param str encoding:
         The encoding standard to be used when sending and receiving byte data. The default is
         "utf-8".  If set to ``None`` no encoding is done and byte data types should be used.
@@ -204,6 +209,7 @@ class BluetoothServer():
         auto_start = True,
         device = "hci0",
         port = 1,
+        uuid = "00001101-0000-1000-8000-00805f9b34fb"
         encoding = "utf-8",
         power_up_device = False,
         when_client_connects = None,
@@ -214,6 +220,7 @@ class BluetoothServer():
 
         self._data_received_callback = data_received_callback
         self._port = port
+        self._uuid = uuid
         self._encoding = encoding
         self._power_up_device = power_up_device
         self._when_client_connects = when_client_connects
@@ -251,6 +258,14 @@ class BluetoothServer():
         The port the server is using. This defaults to 1.
         """
         return self._port
+
+    @property
+    def uuid(self):
+        """
+        The uuid the server is using.
+        This defaults to "00001101-0000-1000-8000-00805f9b34fb".
+        """
+        return self._uuid
 
     @property
     def encoding(self):
@@ -345,7 +360,7 @@ class BluetoothServer():
                 raise Exception("Bluetooth device {} is turned off".format(self.adapter.device))
 
             #register the serial port profile with Bluetooth
-            register_spp(self._port)
+            register_spp(self._port, self._uuid)
 
             #start Bluetooth server
             #open the Bluetooth socket

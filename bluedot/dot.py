@@ -442,6 +442,11 @@ class BlueDot():
         The Bluetooth port the server should use, the default is 1, and under
         normal use this should never need to change.
 
+    :param str uuid:
+        The Bluetooth uuid the server should use,
+        the default is “00001101-0000-1000-8000-00805f9b34fb”, and under
+        normal use this should never need to change.
+
     :param bool auto_start_server:
         If ``True`` (the default), the Bluetooth server will be automatically
         started on initialisation; if ``False``, the method :meth:`start` will
@@ -464,6 +469,7 @@ class BlueDot():
     def __init__(self,
         device = "hci0",
         port = 1,
+        uuid = "00001101-0000-1000-8000-00805f9b34fb"
         auto_start_server = True,
         power_up_device = False,
         print_messages = True):
@@ -471,6 +477,7 @@ class BlueDot():
         self._data_buffer = ""
         self._device = device
         self._port = port
+        self._uuid = uuid
         self._power_up_device = power_up_device
         self._print_messages = print_messages
 
@@ -517,6 +524,14 @@ class BlueDot():
         The port the server is using. This defaults to 1.
             """
         return self._port
+
+    @property
+    def uuid(self):
+        """
+        The uuid the server is using.
+        This defaults to "00001101-0000-1000-8000-00805f9b34fb".
+        """
+        return self._uuid
 
     @property
     def server(self):
@@ -801,6 +816,7 @@ class BlueDot():
                 when_client_disconnects = self._client_disconnected,
                 device = self.device,
                 port = self.port,
+                uuid = self.uuid,
                 power_up_device = self._power_up_device,
                 auto_start = False)
 
