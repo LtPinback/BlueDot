@@ -28,6 +28,7 @@ public class Button extends AppCompatActivity {
     BluetoothSocket btSocket = null;
     private boolean isBtConnected = false;
     private boolean connectionLost = false;
+    int btPort;
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private ProgressDialog progress;
@@ -43,12 +44,13 @@ public class Button extends AppCompatActivity {
         Intent newint = getIntent();
         deviceName = newint.getStringExtra(Devices.EXTRA_NAME);
         address = newint.getStringExtra(Devices.EXTRA_ADDRESS);
+        btPort = newint.getIntExtra(Devices.EXTRA_PORT, 0);
 
         TextView statusView = (TextView)findViewById(R.id.status);
 
         final View roundButton = (View)findViewById(R.id.roundButton);
 
-        statusView.setText("Connecting to " + deviceName);
+        statusView.setText("Connecting to " + deviceName + " via port " + btPort);
 
         new ConnectBT().execute();
 
@@ -162,7 +164,7 @@ public class Button extends AppCompatActivity {
                     Method m = null;
                     try {
                         m = dispositivo.getClass().getMethod("createInsecureRfcommSocket", new Class[] {int.class});
-                        btSocket = (BluetoothSocket) m.invoke(dispositivo,2); //This is the line where port is selected. 2 is used here.
+                        btSocket = (BluetoothSocket) m.invoke(dispositivo,btPort);
                     } catch (NoSuchMethodException e) {
                         e.printStackTrace();
                     } catch (IllegalAccessException e) {
@@ -188,7 +190,7 @@ public class Button extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Failed to connect", Toast.LENGTH_LONG).show();
                 finish();
             } else {
-                msg("Connected to " + deviceName);
+                msg("Connected to " + deviceName + " via port " + btPort);
                 isBtConnected = true;
                 // start the connection monitor
                 new MonitorConnection().execute();
