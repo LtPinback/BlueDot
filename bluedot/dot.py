@@ -469,7 +469,7 @@ class BlueDot():
     def __init__(self,
         device = "hci0",
         port = 1,
-        uuid = "00001101-0000-1000-8000-00805f9b34fb"
+        uuid = "00001101-0000-1000-8000-00805f9b34fb",
         auto_start_server = True,
         power_up_device = False,
         print_messages = True):
