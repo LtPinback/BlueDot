@@ -209,7 +209,7 @@ class BluetoothServer():
         auto_start = True,
         device = "hci0",
         port = 1,
-        uuid = "00001101-0000-1000-8000-00805f9b34fb"
+        uuid = "00001101-0000-1000-8000-00805f9b34fb",
         encoding = "utf-8",
         power_up_device = False,
         when_client_connects = None,
